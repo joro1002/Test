@@ -6,26 +6,23 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner1 = new Scanner(System.in);
-        Scanner scanner2 = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter amount of money:");
         //Read input amount of money
-        BigDecimal amountOfMoney = scanner1.nextBigDecimal();
+        final BigDecimal amountOfMoney = scanner.nextBigDecimal();
         System.out.println("People count:");
         //Read input people count
-        int peopleCount = Integer.parseInt(scanner2.nextLine());
+        final int peopleCount = scanner.nextInt();
 
 
         //List of values how much each person should receive
         List<BigDecimal> list = new ArrayList<>();
 
-        //Check if the money is divided by the number of people without a remainder
-        if (amountOfMoney.remainder(BigDecimal.valueOf(peopleCount)).compareTo(BigDecimal.ZERO) == 0){
-            addNumbersInList(amountOfMoney, peopleCount, list);
-        } else {
-            addNumbersInList(amountOfMoney, peopleCount, list);
+        list = addNumbersInList(amountOfMoney, peopleCount);
 
-            BigDecimal sum = sumNumbers(list);
+        //Check if the money is divided by the number of people with a remainder
+        if (!(amountOfMoney.remainder(BigDecimal.valueOf(peopleCount)).compareTo(BigDecimal.ZERO) == 0)) {
+            final BigDecimal sum = sumNumbers(list);
 
             replaceNumberLower(amountOfMoney, list, sum, amountOfMoney.compareTo(sum) > 0);
         }
@@ -53,7 +50,7 @@ public class Main {
         BigDecimal sum = BigDecimal.valueOf(0);
 
         for (BigDecimal num : list) {
-           sum = sum.add(num);
+            sum = sum.add(num);
         }
         return sum;
     }
@@ -69,10 +66,12 @@ public class Main {
         }
     }
 
-    private static void addNumbersInList(BigDecimal amountOfMoney, int peopleCount, List<BigDecimal> list) {
+    private static List<BigDecimal> addNumbersInList(BigDecimal amountOfMoney, int peopleCount) {
+        List<BigDecimal> addNumbers = new ArrayList<>();
         BigDecimal divide = amountOfMoney.divide(BigDecimal.valueOf(peopleCount), 2, RoundingMode.HALF_UP);
         for (int i = 0; i < peopleCount; i++) {
-            list.add(divide);
+            addNumbers.add(divide);
         }
+        return addNumbers;
     }
 }
